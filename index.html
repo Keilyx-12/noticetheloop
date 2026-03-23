@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loop Identifier | Overthinking Checklist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --accent-color: #ffffff;
+            --text-muted: #888888;
+            --card-bg: #141414;
+            --border-color: #262626;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--accent-color);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .cinematic-gradient {
+            background: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        .page {
+            display: none;
+            min-h-screen;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        .checkbox-container:hover {
+            border-color: #404040;
+            transform: translateY(-1px);
+        }
+
+        .checkbox-container.checked {
+            border-color: var(--accent-color);
+            background: #1a1a1a;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #404040;
+            border-radius: 4px;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .checkbox-container.checked .custom-checkbox {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .custom-checkbox::after {
+            content: '';
+            width: 6px;
+            height: 10px;
+            border: solid var(--bg-color);
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg) scale(0);
+            transition: transform 0.2s ease;
+            margin-bottom: 2px;
+        }
+
+        .checkbox-container.checked .custom-checkbox::after {
+            transform: rotate(45deg) scale(1);
+        }
+
+        .result-bar {
+            height: 6px;
+            background: #262626;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .result-progress {
+            height: 100%;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .role-image {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .description-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #d4d4d8;
+            font-weight: 300;
+        }
+
+        .cta-line {
+            color: #a1a1aa;
+            font-style: italic;
+            font-size: 0.95rem;
+            margin-top: 1.5rem;
+            border-left: 2px solid #3f3f46;
+            padding-left: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--accent-color);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-color);
+            background: #1a1a1a;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-primary:hover {
+            background: #f5f5f5;
+        }
+
+        .progress-indicator {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body class="cinematic-gradient">
+    <!-- Page 1: First 20 Items -->
+    <div id="page1" class="page active pb-20">
+        <div class="max-w-2xl mx-auto px-6 pt-16 md:pt-24">
+            <header class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-semibold mb-4 tracking-tight">Loop Identifier</h1>
+                <p class="text-zinc-400 text-lg font-light max-w-md mx-auto">
+                    Identify the specific pattern of your overthinking. Check the statements that resonate with you.
+                </p>
+            </header>
+
+            <div class="progress-indicator">
+                <p>Page 1 of 2</p>
+            </div>
+
+            <div class="space-y-4 mb-8" id="checklist1">
+                <!-- Items will be injected by JS -->
+            </div>
+
+            <div class="button-group">
+                <button class="btn" onclick="goToPage(2)">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Second 20 Items -->
+    <div id="page2" class="page pb-20">
+        <div class="max-w-2xl mx-auto px-6 pt-16 md:pt-24">
+            <header class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-semibold mb-4 tracking-tight">Loop Identifier</h1>
+                <p class="text-zinc-400 text-lg font-light max-w-md mx-auto">
+                    Continue checking statements that resonate with you.
+                </p>
+            </header>
+
+            <div class="progress-indicator">
+                <p>Page 2 of 2</p>
+            </div>
+
+            <div class="space-y-4 mb-8" id="checklist2">
+                <!-- Items will be injected by JS -->
+            </div>
+
+            <div class="button-group">
+                <button class="btn" onclick="goToPage(1)">Back</button>
+                <button class="btn btn-primary" onclick="goToPage(3)">See Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 3: Results -->
+    <div id="page3" class="page pb-20">
+        <div class="max-w-2xl mx-auto px-6 pt-16 md:pt-24">
+            <header class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-semibold mb-4 tracking-tight">Your Dominant Pattern</h1>
+            </header>
+
+            <div id="dominant-results" class="space-y-16 mb-16">
+                <!-- Dominant types will be injected here -->
+            </div>
+
+            <div class="bg-zinc-900/50 rounded-2xl p-8 border border-zinc-800 mb-8">
+                <h3 class="text-sm uppercase tracking-widest text-zinc-500 mb-6 font-semibold">Breakdown</h3>
+                <div id="breakdown" class="space-y-6">
+                    <!-- Breakdown bars will be injected here -->
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="restartChecklist()">Start Over</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const allStatements = [
+            // Replayer (past conversations) - 10 items
+            { text: "You replay a conversation hours later to find what you said wrong", type: "Replayer" },
+            { text: "You texted something and immediately regret how it came across", type: "Replayer" },
+            { text: "You overanalyze someone's short reply to figure out if they're upset", type: "Replayer" },
+            { text: "You remember an embarrassing moment from years ago and still cringe", type: "Replayer" },
+            { text: "You go back and reread your own messages to see how they might've sounded", type: "Replayer" },
+            { text: "Someone gives you a compliment and you spend time figuring out if they meant it", type: "Replayer" },
+            { text: "You replay an argument not to understand it but to find where you lost", type: "Replayer" },
+            { text: "You remember the exact words you said in a situation that went wrong", type: "Replayer" },
+            { text: "You bring up old conversations in your head before sleeping", type: "Replayer" },
+            { text: "You catch yourself finishing a sentence differently in your head than you did out loud", type: "Replayer" },
+            // Anticipator (future scenarios) - 10 items
+            { text: "You rehearse future conversations before they happen", type: "Anticipator" },
+            { text: "You make a decision then spend the next hour doubting it", type: "Anticipator" },
+            { text: "You imagine worst-case outcomes before anything has happened", type: "Anticipator" },
+            { text: "You delay sending something because you're not sure how it'll land", type: "Anticipator" },
+            { text: "You plan what you'll say in a conversation that might never happen", type: "Anticipator" },
+            { text: "Before an important day you've already mentally lived through it multiple times", type: "Anticipator" },
+            { text: "You prepare for disappointment in advance so it hurts less", type: "Anticipator" },
+            { text: "You avoid starting things because you've already imagined them going wrong", type: "Anticipator" },
+            { text: "You make backup plans for your backup plans", type: "Anticipator" },
+            { text: "You feel anxious about something good happening because you're waiting for it to fall apart", type: "Anticipator" },
+            // Perceiver (how others see you) - 10 items
+            { text: "You wonder how you come across to people you just met", type: "Perceiver" },
+            { text: "You hold back sometimes because you're afraid of being misread", type: "Perceiver" },
+            { text: "You edit messages multiple times before sending", type: "Perceiver" },
+            { text: "You say something in a group and immediately scan faces to see the reaction", type: "Perceiver" },
+            { text: "You tone down your opinion because you're not sure how it'll be received", type: "Perceiver" },
+            { text: "You feel self-conscious in silence — wondering what the other person is thinking", type: "Perceiver" },
+            { text: "You apologize preemptively even when you haven't done anything wrong", type: "Perceiver" },
+            { text: "You notice when someone's energy shifts and immediately assume it's about you", type: "Perceiver" },
+            { text: "You overthink how to word something casual so it doesn't come across wrong", type: "Perceiver" },
+            { text: "After a good interaction you still find something to second-guess about it", type: "Perceiver" },
+            // Looper (no clear trigger) - 10 items
+            { text: "Your thoughts spiral at night with no clear trigger", type: "Looper" },
+            { text: "You get stuck in a loop and can't tell what you're even worried about", type: "Looper" },
+            { text: "You feel mentally tired even when nothing actually happened", type: "Looper" },
+            { text: "You zone out mid-conversation because your mind went somewhere else", type: "Looper" },
+            { text: "You feel a vague sense of unease but can't name what's causing it", type: "Looper" },
+            { text: "You lie in bed with a busy mind even when the day was fine", type: "Looper" },
+            { text: "You start thinking about one thing and somehow end up somewhere completely unrelated", type: "Looper" },
+            { text: "You feel like your brain has a background process running that you can't close", type: "Looper" },
+            { text: "You can't fully relax even in situations that are genuinely calm", type: "Looper" },
+            { text: "You've described yourself as an overthinker but still can't explain exactly what triggers it", type: "Looper" }
+        ];
+
+        const typeInfo = {
+            "Replayer": {
+                name: "The Replayer",
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/113523829/WurWZkGseJsxkCtT.jpg",
+                description: `You don't just remember conversations — you rerun them. Hours after something ends, your brain pulls it back up and starts looking for the moment things went wrong. A word you chose. A pause that felt too long. Something you said that might have landed differently than you meant.<br><br>The thing is, nothing might have actually gone wrong. But that doesn't stop the loop. Your brain treats uncertainty like a problem to solve, so it keeps searching — rewinding, analyzing, replaying — as if the right answer is somewhere in the footage.<br><br>It's not about being insecure. It's about how your brain handles unresolved situations. It doesn't like open endings. So it keeps the file open, running in the background, until something closes it.`
+            },
+            "Anticipator": {
+                name: "The Anticipator",
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/113523829/beTVsxmtppgitlir.jpg",
+                description: `Your overthinking lives in the future. Before anything happens, you've already run the scenario ten times — what you'll say, what they might say back, what happens if it goes wrong, how you'll handle it.<br><br>It feels like preparation. And sometimes it is. But at some point the preparation becomes the loop itself. You're not getting ready anymore — you're just running simulations that never fully settle.<br><br>The exhaustion is real even when nothing has actually happened yet. You can finish a day feeling drained by events that didn't occur, conversations that weren't had, outcomes that never materialized.`
+            },
+            "Perceiver": {
+                name: "The Perceiver",
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/113523829/vKuIKmouuZoAVtQL.jpg",
+                description: `You're constantly aware of how you're coming across. Not in a vain way — in an exhausting way. You notice how you phrased something after you've already said it. You read people's reactions in real time and adjust. You edit messages not for clarity but because you're trying to control how you're received.<br><br>It's like having a second version of yourself watching the first one, critiquing every move. This usually comes from being in environments where being misread had real consequences. You learned to monitor. And now the monitoring runs automatically, even when the situation doesn't require it.`
+            },
+            "Looper": {
+                name: "The Looper",
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/113523829/fHhdWVSzVUaCMLRS.jpg",
+                description: `Your overthinking doesn't always have a specific target. It's less "I'm worried about this one thing" and more a general mental noise that follows you around. A background hum. Thoughts that loop without going anywhere. A vague sense of unease that you can't quite name.<br><br>This is the hardest type to explain to other people, because there's often no clear reason for it. Nothing went wrong. Nothing big is coming. And yet the mind is restless. Loopers often feel a specific kind of tired — not physically exhausted, but mentally worn down by a brain that won't fully rest.`
+            }
+        };
+
+        let checkedItems = new Set();
+        let randomizedStatements = [];
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function init() {
+            randomizedStatements = shuffleArray(allStatements);
+            
+            const checklist1El = document.getElementById('checklist1');
+            const checklist2El = document.getElementById('checklist2');
+
+            randomizedStatements.slice(0, 20).forEach((s, index) => {
+                const div = document.createElement('div');
+                div.className = 'checkbox-container';
+                div.dataset.index = index;
+                div.innerHTML = `
+                    <div class="custom-checkbox"></div>
+                    <span class="text-zinc-300 font-light leading-relaxed">${s.text}</span>
+                `;
+                div.onclick = () => toggleItem(index, div);
+                checklist1El.appendChild(div);
+            });
+
+            randomizedStatements.slice(20, 40).forEach((s, index) => {
+                const div = document.createElement('div');
+                div.className = 'checkbox-container';
+                div.dataset.index = index + 20;
+                div.innerHTML = `
+                    <div class="custom-checkbox"></div>
+                    <span class="text-zinc-300 font-light leading-relaxed">${s.text}</span>
+                `;
+                div.onclick = () => toggleItem(index + 20, div);
+                checklist2El.appendChild(div);
+            });
+        }
+
+        function toggleItem(index, element) {
+            if (checkedItems.has(index)) {
+                checkedItems.delete(index);
+                element.classList.remove('checked');
+            } else {
+                checkedItems.add(index);
+                element.classList.add('checked');
+            }
+        }
+
+        function goToPage(pageNum) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + pageNum).classList.add('active');
+            window.scrollTo(0, 0);
+
+            if (pageNum === 3) {
+                updateResults();
+            }
+        }
+
+        function updateResults() {
+            const counts = { "Replayer": 0, "Anticipator": 0, "Perceiver": 0, "Looper": 0 };
+            
+            checkedItems.forEach(index => {
+                counts[randomizedStatements[index].type]++;
+            });
+
+            let maxCount = 0;
+            for (const type in counts) {
+                if (counts[type] > maxCount) maxCount = counts[type];
+            }
+
+            const dominantTypes = [];
+            if (maxCount > 0) {
+                for (const type in counts) {
+                    if (counts[type] === maxCount) dominantTypes.push(type);
+                }
+            }
+
+            const dominantResultsEl = document.getElementById('dominant-results');
+            dominantResultsEl.innerHTML = dominantTypes.map(type => `
+                <div class="fade-in visible">
+                    <img src="${typeInfo[type].image}" alt="${typeInfo[type].name}" class="role-image">
+                    <h3 class="text-3xl font-semibold mb-6">${typeInfo[type].name}</h3>
+                    <div class="description-text">
+                        ${typeInfo[type].description}
+                    </div>
+                    <p class="cta-line">
+                        The workbook has a system built specifically for this pattern.
+                    </p>
+                </div>
+            `).join('<div class="h-px bg-zinc-800 w-full my-16"></div>');
+
+            const breakdownEl = document.getElementById('breakdown');
+            breakdownEl.innerHTML = Object.keys(counts).map(type => {
+                const percentage = (counts[type] / 10) * 100;
+                return `
+                    <div>
+                        <div class="flex justify-between text-xs mb-2">
+                            <span class="text-zinc-400 uppercase tracking-wider">${type}</span>
+                            <span class="text-zinc-500">${counts[type]}/10</span>
+                        </div>
+                        <div class="result-bar">
+                            <div class="result-progress" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function restartChecklist() {
+            checkedItems.clear();
+            document.querySelectorAll('.checkbox-container').forEach(el => {
+                el.classList.remove('checked');
+            });
+            goToPage(1);
+        }
+
+        init();
+    </script>
+</body>
+</html>
